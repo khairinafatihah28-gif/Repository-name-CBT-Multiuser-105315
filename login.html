@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - SD Negeri 105315 | CBT App</title>
+    <link rel="icon" href="/assets/logo-sekolah.svg">
+    <link rel="stylesheet" href="/assets/app.css">
+</head>
+
+<body>
+    <main class="center-page pink-page">
+        <section class="card login-card pretty-card">
+            <div class="brand-row">
+                <img class="school-logo" src="/assets/logo-sekolah.svg" alt="Logo SD Negeri 105315">
+                <div class="brand-text">
+                    <strong>SD NEGERI 105315</strong>
+                    <span>CBT App &middot; Ujian Online</span>
+                </div>
+            </div>
+
+            <h1>Masuk Akun</h1>
+            <p class="muted">
+                Login sesuai role: Admin, Guru, atau Siswa. Guru dan siswa wajib verifikasi email terlebih dahulu.
+            </p>
+
+            <form id="loginForm" class="form">
+                <label>Email</label>
+                <input id="email" type="email" value="siswa@cbt.test" required>
+
+                <label>Password</label>
+                <input id="password" type="password" value="password123" required>
+
+                <button class="button primary full" type="submit">Masuk</button>
+            </form>
+
+            <div id="message" class="message hidden"></div>
+            <div id="verifyAction" class="verify-action hidden"></div>
+
+            <div class="demo-box">
+                <strong>Akun demo</strong>
+                <p>Admin: yaya@cbt.test</p>
+                <p>Guru: guru@cbt.test</p>
+                <p>Siswa: siswa@cbt.test</p>
+                <p>Password semua akun: password123</p>
+                <p>Kode demo guru: 123456</p>
+                <p>Kode demo siswa: 654321</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const message = document.getElementById('message');
+        const verifyAction = document.getElementById('verifyAction');
+
+        form.addEventListener('submit', async(event) => {
+            event.preventDefault();
+
+            message.className = 'message hidden';
+            message.textContent = '';
+            verifyAction.className = 'verify-action hidden';
+            verifyAction.innerHTML = '';
+
+            const email = document.getElementById('email').value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password: document.getElementById('password').value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    if (data.code === 'EMAIL_NOT_VERIFIED') {
+                        message.className = 'message warning';
+                        message.textContent = data.message;
+
+                        verifyAction.className = 'verify-action';
+                        verifyAction.className = 'verify-action';
+                        verifyAction.innerHTML = `
+  <button class="button primary full" type="button" id="goVerifyButton">
+    Verifikasi Email Sekarang
+  </button>
+`;
+
+                        document.getElementById('goVerifyButton').addEventListener('click', () => {
+                            window.location.href = `/verify-email.html?email=${encodeURIComponent(data.email || email)}`;
+                        });
+                        return;
+                    }
+
+                    throw new Error(data.message || 'Login gagal.');
+                }
+
+                localStorage.setItem('cbt_token', data.token);
+                localStorage.setItem('cbt_user', JSON.stringify(data.user));
+                window.location.href = '/dashboard.html';
+            } catch (error) {
+                message.className = 'message error';
+                message.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+
+</html>
