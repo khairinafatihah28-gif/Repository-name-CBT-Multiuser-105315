@@ -11,7 +11,7 @@ const pool = mysql.createPool({
   queueLimit: 0,
   timezone: '+07:00',
   ssl: {
-    rejectUnauthorized: true
+    rejectUnauthorized: false
   }
 });
 
