@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verifikasi Email - SD Negeri 105315 | CBT App</title>
+  <link rel="icon" href="/assets/logo-sekolah.svg">
+  <link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+  <main class="center-page pink-page">
+    <section class="card login-card pretty-card">
+      <div class="brand-row">
+        <img class="school-logo" src="/assets/logo-sekolah.svg" alt="Logo SD Negeri 105315">
+        <div class="brand-text">
+          <strong>SD NEGERI 105315</strong>
+          <span>Verifikasi Email</span>
+        </div>
+      </div>
+
+      <h1>Verifikasi Email</h1>
+      <p class="muted">
+        Masukkan email dan kode 6 digit yang diberikan oleh admin.
+      </p>
+
+      <form id="verifyForm" class="form">
+        <label>Email</label>
+        <input id="email" type="email" placeholder="contoh: siswa@cbt.test" required>
+
+        <label>Kode Verifikasi</label>
+        <input id="code" type="text" maxlength="6" placeholder="Masukkan kode 6 digit" required>
+
+        <button class="button primary full" type="submit">Verifikasi</button>
+      </form>
+
+      <div id="message" class="message hidden"></div>
+
+      <div class="demo-box">
+        <strong>Kode demo latihan</strong>
+        <p>Guru Demo: 123456</p>
+        <p>Siswa Demo: 654321</p>
+        <p>User baru: lihat kode pada dashboard admin.</p>
+      </div>
+
+      <div class="button-row">
+        <a href="/login.html" class="button full">Kembali ke Login</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const emailParam = params.get('email');
+
+    const form = document.getElementById('verifyForm');
+    const message = document.getElementById('message');
+
+    if (emailParam) {
+      document.getElementById('email').value = emailParam;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      message.className = 'message hidden';
+      message.textContent = '';
+
+      try {
+        const response = await fetch('/api/auth/verify-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: document.getElementById('email').value,
+            code: document.getElementById('code').value
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Verifikasi gagal.');
+        }
+
+        message.className = 'message success';
+        message.textContent = data.message;
+
+        setTimeout(() => {
+          window.location.href = '/login.html';
+        }, 1600);
+      } catch (error) {
+        message.className = 'message error';
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6d97e"/>
+      <stop offset="100%" stop-color="#c99a2e"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#17392b"/>
+      <stop offset="100%" stop-color="#0c2119"/>
+    </linearGradient>
+    <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6d97e"/>
+      <stop offset="100%" stop-color="#f0c04f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- outer ring -->
+  <circle cx="100" cy="100" r="96" fill="url(#ringGrad)"/>
+  <!-- inner badge -->
+  <circle cx="100" cy="100" r="86" fill="url(#bgGrad)" stroke="#f4efdd" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- laurel-ish dotted rim -->
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#f0c04f" stroke-width="1.5" stroke-opacity="0.5" stroke-dasharray="2 6"/>
+
+  <!-- open book -->
+  <g transform="translate(100,112)">
+    <path d="M-42,-6 C-30,-14 -12,-14 0,-4 C12,-14 30,-14 42,-6 L42,18 C30,10 12,10 0,18 C-12,10 -30,10 -42,18 Z"
+          fill="url(#bookGrad)" stroke="#c99a2e" stroke-width="1.2"/>
+    <line x1="0" y1="-4" x2="0" y2="18" stroke="#c99a2e" stroke-width="1.2"/>
+    <path d="M-34,-2 L-8,-2 M-34,4 L-8,4 M-34,10 L-8,10" stroke="#17392b" stroke-width="1.4" stroke-linecap="round" opacity="0.55"/>
+    <path d="M34,-2 L8,-2 M34,4 L8,4 M34,10 L8,10" stroke="#17392b" stroke-width="1.4" stroke-linecap="round" opacity="0.55"/>
+  </g>
+
+  <!-- graduation cap above book -->
+  <g transform="translate(100,64)">
+    <polygon points="0,-14 34,0 0,14 -34,0" fill="#f4efdd"/>
+    <polygon points="0,-14 34,0 0,14 -34,0" fill="none" stroke="#c99a2e" stroke-width="1.2"/>
+    <rect x="-9" y="14" width="18" height="10" rx="2" fill="#f0c04f"/>
+    <line x1="26" y1="4" x2="26" y2="24" stroke="#f4efdd" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="26" cy="26" r="2.6" fill="#f4efdd"/>
+  </g>
+
+  <!-- curved school name -->
+  <path id="topArc" d="M 26 100 A 74 74 0 0 1 174 100" fill="none"/>
+  <text font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="15.5" font-weight="700" letter-spacing="1.5" fill="#f4efdd">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">SD NEGERI 105315</textPath>
+  </text>
+
+  <!-- number badge -->
+  <g transform="translate(100,150)">
+    <rect x="-30" y="-11" width="60" height="22" rx="11" fill="#f0c04f"/>
+    <text x="0" y="5" font-family="'IBM Plex Mono','Courier New',monospace" font-size="13" font-weight="700" text-anchor="middle" fill="#17392b">105315</text>
+  </g>
+</svg>

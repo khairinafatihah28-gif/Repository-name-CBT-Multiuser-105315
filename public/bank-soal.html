@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Bank Soal - SD Negeri 105315 | CBT App</title>
+  <link rel="icon" href="/assets/logo-sekolah.svg">
+
+  <link
+    rel="stylesheet"
+    href="/assets/app.css"
+  >
+
+  <style>
+    .filter-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .bank-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .bank-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.025);
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .bank-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(124, 156, 255, 0.35);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .option-list {
+      display: grid;
+      gap: 8px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .option-list li {
+      padding: 10px 12px;
+      color: #c9d0e0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .option-list .correct {
+      color: var(--success-text);
+      font-weight: 700;
+      border-color: rgba(23, 201, 141, 0.4);
+      background: var(--success-bg);
+    }
+
+    .exam-select-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 800px) {
+      .filter-grid,
+      .bank-grid,
+      .exam-select-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand-row">
+      <img class="school-logo small" src="/assets/logo-sekolah.svg" alt="Logo SD Negeri 105315">
+      <div class="brand-text">
+        <strong>SD Negeri 105315</strong>
+        <span id="userInfo" class="muted"></span>
+      </div>
+    </div>
+
+    <div class="button-row compact">
+      <a
+        href="/dashboard.html"
+        class="button small"
+      >
+        Dashboard
+      </a>
+
+      <button
+        id="logoutButton"
+        class="button small"
+        type="button"
+      >
+        Keluar
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <p class="eyebrow">
+        Part 5
+      </p>
+
+      <h1>Manajemen Bank Soal</h1>
+
+      <p class="muted">
+        Tambah, edit, hapus, dan gunakan
+        kembali soal untuk berbagai ujian.
+      </p>
+
+      <div
+        id="message"
+        class="message hidden"
+      ></div>
+    </section>
+
+    <section class="card">
+      <h2 id="formTitle">
+        Tambah Soal Baru
+      </h2>
+
+      <form
+        id="questionForm"
+        class="panel form-panel"
+      >
+        <input
+          id="editingQuestionId"
+          type="hidden"
+        >
+
+        <div class="mini-grid">
+          <div>
+            <label for="subjectId">
+              Mata Pelajaran
+            </label>
+
+            <select
+              id="subjectId"
+              class="input"
+              required
+            ></select>
+          </div>
+
+          <div>
+            <label for="difficultyLevel">
+              Tingkat Kesulitan
+            </label>
+
+            <select
+              id="difficultyLevel"
+              class="input"
+              required
+            >
+              <option value="mudah">
+                Mudah
+              </option>
+
+              <option value="sedang">
+                Sedang
+              </option>
+
+              <option value="sulit">
+                Sulit
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="point">
+              Poin
+            </label>
+
+            <input
+              id="point"
+              class="input"
+              type="number"
+              min="1"
+              value="1"
+              required
+            >
+          </div>
+        </div>
+
+        <label for="questionText">
+          Teks Soal
+        </label>
+
+        <textarea
+          id="questionText"
+          class="input"
+          rows="4"
+          required
+        ></textarea>
+
+        <div class="mini-grid">
+          <input
+            id="optionA"
+            class="input"
+            placeholder="Pilihan A"
+            required
+          >
+
+          <input
+            id="optionB"
+            class="input"
+            placeholder="Pilihan B"
+            required
+          >
+
+          <input
+            id="optionC"
+            class="input"
+            placeholder="Pilihan C"
+            required
+          >
+
+          <input
+            id="optionD"
+            class="input"
+            placeholder="Pilihan D"
+            required
+          >
+
+          <input
+            id="optionE"
+            class="input"
+            placeholder="Pilihan E"
+            required
+          >
+
+          <select
+            id="correctLabel"
+            class="input"
+            required
+          >
+            <option value="A">
+              Kunci A
+            </option>
+
+            <option value="B">
+              Kunci B
+            </option>
+
+            <option value="C">
+              Kunci C
+            </option>
+
+            <option value="D">
+              Kunci D
+            </option>
+
+            <option value="E">
+              Kunci E
+            </option>
+          </select>
+        </div>
+
+        <div class="button-row compact">
+          <button
+            class="button primary"
+            type="submit"
+          >
+            Simpan Soal
+          </button>
+
+          <button
+            id="resetButton"
+            class="button"
+            type="button"
+          >
+            Reset
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Daftar Bank Soal</h2>
+
+      <div class="filter-grid">
+        <input
+          id="filterSearch"
+          class="input"
+          type="text"
+          placeholder="Cari teks soal..."
+        />
+
+        <select
+          id="filterSubject"
+          class="input"
+        ></select>
+
+        <select
+          id="filterDifficulty"
+          class="input"
+        >
+          <option value="">
+            Semua Tingkat
+          </option>
+
+          <option value="mudah">
+            Mudah
+          </option>
+
+          <option value="sedang">
+            Sedang
+          </option>
+
+          <option value="sulit">
+            Sulit
+          </option>
+        </select>
+
+        <button
+          id="refreshButton"
+          class="button"
+          type="button"
+        >
+          Muat Ulang
+        </button>
+      </div>
+
+      <br>
+
+      <div
+        id="questionList"
+        class="bank-grid"
+      ></div>
+    </section>
+  </main>
+
+  <script>
+    const token =
+      localStorage.getItem('cbt_token');
+
+    const user = JSON.parse(
+      localStorage.getItem('cbt_user') ||
+      'null'
+    );
+
+    if (!token || !user) {
+      window.location.replace(
+        '/login.html'
+      );
+    }
+
+    if (
+      user &&
+      !['admin', 'teacher'].includes(
+        user.role
+      )
+    ) {
+      window.location.replace(
+        '/dashboard.html'
+      );
+    }
+
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+
+    const jsonHeaders = {
+      ...headers,
+      'Content-Type': 'application/json'
+    };
+
+    const state = {
+      subjects: [],
+      exams: [],
+      questions: []
+    };
+
+    const messageBox =
+      document.getElementById('message');
+
+    const questionList =
+      document.getElementById(
+        'questionList'
+      );
+
+    document.getElementById(
+      'userInfo'
+    ).textContent =
+      `— ${user.name} (${user.role})`;
+
+    document.getElementById(
+      'logoutButton'
+    ).addEventListener(
+      'click',
+      () => {
+        localStorage.removeItem(
+          'cbt_token'
+        );
+
+        localStorage.removeItem(
+          'cbt_user'
+        );
+
+        window.location.replace(
+          '/login.html'
+        );
+      }
+    );
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function showMessage(
+      text,
+      type = 'error'
+    ) {
+      messageBox.className =
+        `message ${type}`;
+
+      messageBox.textContent = text;
+
+      setTimeout(() => {
+        messageBox.className =
+          'message hidden';
+
+        messageBox.textContent = '';
+      }, 4000);
+    }
+
+    async function requestJson(
+      url,
+      options = {}
+    ) {
+      const response = await fetch(
+        url,
+        options
+      );
+
+      const data = await response
+        .json()
+        .catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          'Terjadi kesalahan.'
+        );
+      }
+
+      return data;
+    }
+
+    async function loadSubjects() {
+      const data = await requestJson(
+        '/api/exams/manage/subjects',
+        {
+          headers
+        }
+      );
+
+      state.subjects =
+        data.subjects || [];
+
+      const options =
+        state.subjects.map(
+          (subject) => `
+            <option value="${subject.id}">
+              ${escapeHtml(subject.name)}
+            </option>
+          `
+        ).join('');
+
+      document.getElementById(
+        'subjectId'
+      ).innerHTML =
+        '<option value="">Pilih mata pelajaran</option>' +
+        options;
+
+      document.getElementById(
+        'filterSubject'
+      ).innerHTML =
+        '<option value="">Semua mata pelajaran</option>' +
+        options;
+    }
+
+    async function loadExams() {
+      const data = await requestJson(
+        '/api/exams/manage',
+        {
+          headers
+        }
+      );
+
+      state.exams = data.exams || [];
+    }
+
+    async function loadQuestions() {
+      try {
+        questionList.innerHTML =
+          '<p>Memuat Bank Soal...</p>';
+
+        const subjectId =
+          document.getElementById(
+            'filterSubject'
+          ).value;
+
+        const difficulty =
+          document.getElementById(
+            'filterDifficulty'
+          ).value;
+
+        const search =
+          document.getElementById(
+            'filterSearch'
+          ).value.trim();
+
+        const params =
+          new URLSearchParams();
+
+        if (subjectId) {
+          params.set(
+            'subject_id',
+            subjectId
+          );
+        }
+
+        if (difficulty) {
+          params.set(
+            'difficulty_level',
+            difficulty
+          );
+        }
+
+        if (search) {
+          params.set(
+            'search',
+            search
+          );
+        }
+
+        const query = params.toString();
+
+        const data = await requestJson(
+          `/api/question-bank${
+            query ? `?${query}` : ''
+          }`,
+          {
+            headers
+          }
+        );
+
+        state.questions =
+          data.questions || [];
+
+        renderQuestions();
+      } catch (error) {
+        questionList.innerHTML = `
+          <p class="error-text">
+            ${escapeHtml(error.message)}
+          </p>
+        `;
+      }
+    }
+
+    function renderQuestions() {
+      if (state.questions.length === 0) {
+        questionList.innerHTML = `
+          <p class="muted">
+            Belum ada soal.
+          </p>
+        `;
+
+        return;
+      }
+
+      questionList.innerHTML =
+        state.questions.map(
+          (question) => {
+            const matchingExams =
+              state.exams.filter(
+                (exam) =>
+                  Number(exam.subject_id) ===
+                  Number(question.subject_id)
+              );
+
+            const examOptions =
+              matchingExams.map(
+                (exam) => `
+                  <option value="${exam.id}">
+                    ${escapeHtml(exam.title)}
+                  </option>
+                `
+              ).join('');
+
+            const canManage =
+              user.role === 'admin' ||
+              Number(
+                question.created_by
+              ) ===
+                Number(user.id);
+
+            return `
+              <article class="bank-card">
+                <p class="eyebrow">
+                  ${escapeHtml(
+                    question.subject_name
+                  )}
+                  ·
+                  ${escapeHtml(
+                    question.difficulty_level
+                  )}
+                  ·
+                  Dibuat oleh
+                  ${escapeHtml(
+                    question.creator_name ||
+                    '-'
+                  )}
+                </p>
+
+                <h3>
+                  ${escapeHtml(
+                    question.question_text
+                  )}
+                </h3>
+
+                <p>
+                  Poin:
+                  <strong>
+                    ${escapeHtml(
+                      question.point
+                    )}
+                  </strong>
+                </p>
+
+                <ul class="option-list">
+                  ${question.options.map(
+                    (option) => `
+                      <li class="${
+                        option.is_correct
+                          ? 'correct'
+                          : ''
+                      }">
+                        <strong>
+                          ${escapeHtml(
+                            option.option_label
+                          )}.
+                        </strong>
+
+                        ${escapeHtml(
+                          option.option_text
+                        )}
+
+                        ${
+                          option.is_correct
+                            ? '<span class="badge success">Kunci</span>'
+                            : ''
+                        }
+                      </li>
+                    `
+                  ).join('')}
+                </ul>
+
+                ${
+                  canManage
+                    ? `
+                      <div class="button-row compact">
+                        <button
+                          class="button small"
+                          onclick="editQuestion(
+                            ${question.id}
+                          )"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          class="button small danger"
+                          onclick="deleteQuestion(
+                            ${question.id}
+                          )"
+                        >
+                          Hapus
+                        </button>
+                      </div>
+                    `
+                    : ''
+                }
+
+                <div class="exam-select-row">
+                  <select
+                    id="exam_${question.id}"
+                    class="input"
+                  >
+                    <option value="">
+                      Pilih ujian tujuan
+                    </option>
+
+                    ${examOptions}
+                  </select>
+
+                  <button
+                    class="button primary"
+                    onclick="addToExam(
+                      ${question.id}
+                    )"
+                  >
+                    Tambah ke Ujian
+                  </button>
+                </div>
+              </article>
+            `;
+          }
+        ).join('');
+    }
+
+    function createPayload() {
+      return {
+        subject_id:
+          document.getElementById(
+            'subjectId'
+          ).value,
+
+        difficulty_level:
+          document.getElementById(
+            'difficultyLevel'
+          ).value,
+
+        point:
+          document.getElementById(
+            'point'
+          ).value,
+
+        question_text:
+          document.getElementById(
+            'questionText'
+          ).value,
+
+        correct_label:
+          document.getElementById(
+            'correctLabel'
+          ).value,
+
+        options: [
+          'A',
+          'B',
+          'C',
+          'D',
+          'E'
+        ].map((label) => ({
+          label,
+          text:
+            document.getElementById(
+              `option${label}`
+            ).value
+        }))
+      };
+    }
+
+    async function saveQuestion(event) {
+      event.preventDefault();
+
+      const questionId =
+        document.getElementById(
+          'editingQuestionId'
+        ).value;
+
+      try {
+        await requestJson(
+          questionId
+            ? `/api/question-bank/${questionId}`
+            : '/api/question-bank',
+          {
+            method:
+              questionId
+                ? 'PUT'
+                : 'POST',
+
+            headers: jsonHeaders,
+
+            body: JSON.stringify(
+              createPayload()
+            )
+          }
+        );
+
+        resetForm();
+        await loadQuestions();
+
+        showMessage(
+          questionId
+            ? 'Soal berhasil diperbarui.'
+            : 'Soal berhasil ditambahkan.',
+          'success'
+        );
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    function editQuestion(questionId) {
+      const question =
+        state.questions.find(
+          (item) =>
+            Number(item.id) ===
+            Number(questionId)
+        );
+
+      if (!question) {
+        return;
+      }
+
+      document.getElementById(
+        'formTitle'
+      ).textContent = 'Edit Soal';
+
+      document.getElementById(
+        'editingQuestionId'
+      ).value = question.id;
+
+      document.getElementById(
+        'subjectId'
+      ).value = question.subject_id;
+
+      document.getElementById(
+        'difficultyLevel'
+      ).value =
+        question.difficulty_level;
+
+      document.getElementById(
+        'point'
+      ).value = question.point;
+
+      document.getElementById(
+        'questionText'
+      ).value =
+        question.question_text;
+
+      question.options.forEach(
+        (option) => {
+          document.getElementById(
+            `option${option.option_label}`
+          ).value =
+            option.option_text;
+
+          if (option.is_correct) {
+            document.getElementById(
+              'correctLabel'
+            ).value =
+              option.option_label;
+          }
+        }
+      );
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    function resetForm() {
+      document.getElementById(
+        'questionForm'
+      ).reset();
+
+      document.getElementById(
+        'editingQuestionId'
+      ).value = '';
+
+      document.getElementById(
+        'formTitle'
+      ).textContent =
+        'Tambah Soal Baru';
+
+      document.getElementById(
+        'point'
+      ).value = 1;
+    }
+
+    async function deleteQuestion(
+      questionId
+    ) {
+      if (
+        !confirm(
+          'Yakin ingin menghapus soal ini?'
+        )
+      ) {
+        return;
+      }
+
+      try {
+        await requestJson(
+          `/api/question-bank/${questionId}`,
+          {
+            method: 'DELETE',
+            headers
+          }
+        );
+
+        await loadQuestions();
+
+        showMessage(
+          'Soal berhasil dihapus.',
+          'success'
+        );
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    async function addToExam(
+      questionId
+    ) {
+      const examId =
+        document.getElementById(
+          `exam_${questionId}`
+        ).value;
+
+      if (!examId) {
+        showMessage(
+          'Pilih ujian tujuan.'
+        );
+
+        return;
+      }
+
+      try {
+        await requestJson(
+          `/api/question-bank/${questionId}/add-to-exam`,
+          {
+            method: 'POST',
+            headers: jsonHeaders,
+            body: JSON.stringify({
+              exam_id: examId
+            })
+          }
+        );
+
+        showMessage(
+          'Soal berhasil ditambahkan ke ujian.',
+          'success'
+        );
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    document.getElementById(
+      'questionForm'
+    ).addEventListener(
+      'submit',
+      saveQuestion
+    );
+
+    document.getElementById(
+      'resetButton'
+    ).addEventListener(
+      'click',
+      resetForm
+    );
+
+    document.getElementById(
+      'refreshButton'
+    ).addEventListener(
+      'click',
+      loadQuestions
+    );
+
+    document.getElementById(
+      'filterSubject'
+    ).addEventListener(
+      'change',
+      loadQuestions
+    );
+
+    document.getElementById(
+      'filterDifficulty'
+    ).addEventListener(
+      'change',
+      loadQuestions
+    );
+
+    let searchDebounceTimer = null;
+
+    document.getElementById(
+      'filterSearch'
+    ).addEventListener(
+      'input',
+      () => {
+        clearTimeout(
+          searchDebounceTimer
+        );
+
+        searchDebounceTimer =
+          setTimeout(
+            loadQuestions,
+            400
+          );
+      }
+    );
+
+    async function init() {
+      try {
+        await loadSubjects();
+        await loadExams();
+        await loadQuestions();
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
