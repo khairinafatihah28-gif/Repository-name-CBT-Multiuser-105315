@@ -22,10 +22,6 @@ const questionBankRoutes = require(
 
 const app = express();
 
-const port = Number(
-  process.env.APP_PORT || 3000
-);
-
 app.use(cors());
 
 app.use(express.json());
@@ -101,11 +97,8 @@ app.use(
   }
 );
 
-app.listen(
-  port,
-  () => {
-    console.log(
-      `CBT app berjalan di http://localhost:${port}`
-    );
-  }
-);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server berjalan di port ${PORT}`);
+});
